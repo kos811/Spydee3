@@ -1,3 +1,4 @@
+using Kos811.Spydee3.Contract.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kos811.Spydee3.Controllers

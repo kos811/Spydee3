@@ -1,4 +1,4 @@
-namespace Kos811.Spydee3
+namespace Kos811.Spydee3.Contract.Models
 {
     public class WeatherForecast
     {
