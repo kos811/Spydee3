@@ -1,4 +1,6 @@
-﻿using Kos811.Spydee3.Services;
+﻿using Kos811.Spydee3.DataAccess.Repositories;
+using Kos811.Spydee3.Domain;
+using Kos811.Spydee3.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kos811.Spydee3.Api.Controllers;
@@ -9,15 +11,17 @@ public class IndexerController : ControllerBase
 {
     private readonly ILogger<IndexerController> _logger;
     private readonly PageDownloader _pageDownloader;
+    private readonly PageRepository _pageRepository;
 
-    public IndexerController(ILogger<IndexerController> logger, PageDownloader pageDownloader)
+    public IndexerController(ILogger<IndexerController> logger, PageDownloader pageDownloader, PageRepository pageRepository)
     {
         _logger = logger;
         _pageDownloader = pageDownloader;
+        _pageRepository = pageRepository;
     }
 
     [HttpGet("ProcessPage")]
-    public async Task<IActionResult> ProcessPage(string url)
+    public async Task<IActionResult> ProcessPage(string url, CancellationToken cancellationToken)
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
             return BadRequest($"Cant parse uri: '{url}'");
@@ -25,6 +29,13 @@ public class IndexerController : ControllerBase
         _logger.LogInformation("Uri '{uri}' parsed successfully.", uri);
 
         var result = await _pageDownloader.Download(uri);
+
+#pragma warning disable CS0162
+        var page = new Page(result.Uri, 1, result.ResponseReasonPhrase, result.ResponseContent);
+#pragma warning restore CS0162
+
+        //await _pageRepository.AddAsync(page, cancellationToken);
+        await _pageRepository.AddBatchAsync(page, cancellationToken);
 
         return Ok(result);
     }
