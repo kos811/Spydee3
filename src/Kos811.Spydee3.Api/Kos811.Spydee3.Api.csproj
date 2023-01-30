@@ -11,6 +11,9 @@
     <Content Include="..\.dockerignore">
       <Link>.dockerignore</Link>
     </Content>
+    <Content Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kos811.Spydee3.DataAccess\Kos811.Spydee3.DataAccess.csproj" />
     <ProjectReference Include="..\Kos811.Spydee3.Services\Kos811.Spydee3.Services.csproj" />
   </ItemGroup>
 

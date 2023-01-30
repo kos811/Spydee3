@@ -7,7 +7,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 2181:2181
-  
+
   kafka:
     image: wurstmeister/kafka:latest
     depends_on:
@@ -24,3 +24,17 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_CREATE_TOPICS: >-
         gdz_sku_groups_internal:10:1
+
+  clickhouse:
+    image: bitnami/clickhouse:latest
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - CLICKHOUSE_ADMIN_PASSWORD=pwd
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - "clickhouse_volume:/bitnami/clickhouse"
+
+volumes:
+  clickhouse_volume:
