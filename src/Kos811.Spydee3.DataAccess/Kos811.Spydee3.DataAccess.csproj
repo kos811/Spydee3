@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <PackageReference Include="ClickHouse.Client" />
+      <PackageReference Include="EntityFrameworkCore.ClickHouse" />
     </ItemGroup>
 
     <ItemGroup>

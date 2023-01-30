@@ -12,12 +12,14 @@ public class IndexerController : ControllerBase
     private readonly ILogger<IndexerController> _logger;
     private readonly PageDownloader _pageDownloader;
     private readonly PageRepository _pageRepository;
+    private readonly PageParser _pageParser;
 
-    public IndexerController(ILogger<IndexerController> logger, PageDownloader pageDownloader, PageRepository pageRepository)
+    public IndexerController(ILogger<IndexerController> logger, PageDownloader pageDownloader, PageRepository pageRepository, PageParser pageParser)
     {
         _logger = logger;
         _pageDownloader = pageDownloader;
         _pageRepository = pageRepository;
+        _pageParser = pageParser;
     }
 
     [HttpGet("ProcessPage")]
@@ -36,7 +38,8 @@ public class IndexerController : ControllerBase
 
         //await _pageRepository.AddAsync(page, cancellationToken);
         await _pageRepository.AddBatchAsync(page, cancellationToken);
+        var parseResult = _pageParser.Parse(page);
 
-        return Ok(result);
+        return Ok(parseResult);
     }
 }
